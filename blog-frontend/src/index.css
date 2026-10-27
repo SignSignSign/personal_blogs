@@ -1,0 +1,295 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== 全局基础样式 ===== */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #fbfdfb;
+  color: #365314;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ========== 全局花草装饰背景 ========== */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+/* 左下花丛 */
+body::before {
+  left: -40px;
+  bottom: -30px;
+  width: 260px;
+  height: 220px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 220'><g fill='none' stroke='%234ade80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' opacity='0.55'><path d='M30 200 Q50 160 40 100 Q35 60 50 20'/><path d='M70 210 Q90 170 80 110 Q75 70 95 30'/><path d='M120 215 Q140 175 130 120 Q125 80 150 40'/><path d='M170 208 Q185 170 175 115 Q170 75 195 35'/><path d='M215 212 Q228 175 220 120 Q216 80 235 40'/></g><g fill='%2386efac' opacity='0.6'><ellipse cx='42' cy='90' rx='14' ry='8' transform='rotate(-30 42 90)'/><ellipse cx='48' cy='55' rx='12' ry='7' transform='rotate(25 48 55)'/><ellipse cx='82' cy='95' rx='15' ry='8' transform='rotate(-25 82 95)'/><ellipse cx='90' cy='60' rx='13' ry='7' transform='rotate(30 90 60)'/><ellipse cx='132' cy='105' rx='15' ry='9' transform='rotate(-28 132 105)'/><ellipse cx='140' cy='65' rx='14' ry='8' transform='rotate(22 140 65)'/><ellipse cx='178' cy='100' rx='14' ry='8' transform='rotate(-22 178 100)'/><ellipse cx='186' cy='58' rx='13' ry='7' transform='rotate(28 186 58)'/><ellipse cx='223' cy='105' rx='14' ry='8' transform='rotate(-25 223 105)'/><ellipse cx='230' cy='62' rx='13' ry='7' transform='rotate(25 230 62)'/></g><g fill='%23f9a8d4' opacity='0.75'><circle cx='42' cy='32' r='6'/><circle cx='88' cy='42' r='7'/><circle cx='142' cy='48' r='8'/><circle cx='190' cy='45' r='6'/><circle cx='232' cy='42' r='7'/></g></svg>") no-repeat bottom left;
+  background-size: contain;
+}
+
+/* 右上叶片 */
+body::after {
+  right: -50px;
+  top: 40px;
+  width: 220px;
+  height: 200px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 200'><g fill='%234ade80' opacity='0.5'><path d='M180 10 Q210 40 200 80 Q180 110 150 100 Q130 80 140 50 Q155 25 180 10 Z'/><path d='M160 50 Q195 70 190 110 Q175 135 145 125 Q125 105 135 75 Q150 55 160 50 Z'/><path d='M200 30 Q225 55 220 90 Q205 115 180 105 Q160 85 170 55 Q185 35 200 30 Z'/></g><g fill='%2386efac' opacity='0.45'><path d='M30 140 Q60 110 100 120 Q130 140 120 170 Q100 190 70 180 Q45 165 30 140 Z'/><path d='M60 160 Q90 135 125 145 Q150 165 140 190 Q120 200 95 195 Q70 180 60 160 Z'/></g></svg>") no-repeat top right;
+  background-size: contain;
+}
+
+/* 暗黑模式：花草换成更深的绿色 */
+html.dark body::before {
+  opacity: 0.2;
+  filter: hue-rotate(-10deg);
+}
+
+html.dark body::after {
+  opacity: 0.18;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== 可复用组件 ===== */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm;
+  }
+
+  .btn-primary {
+    @apply btn bg-mint-400 hover:bg-mint-500 text-white shadow-soft;
+  }
+
+  .btn-ghost {
+    @apply btn border border-mint-200 text-mint-600 hover:bg-mint-50;
+  }
+
+  .btn-danger {
+    @apply btn text-red-500 hover:bg-red-50;
+  }
+
+  .card {
+    @apply bg-white rounded-xl2 border border-mint-100 shadow-card transition-shadow hover:shadow-soft;
+  }
+
+  .input {
+    @apply w-full px-3 py-2 rounded-lg border border-mint-200 bg-white text-sm focus:outline-none focus:border-mint-400 focus:ring-2 focus:ring-mint-100 placeholder:text-cream-300;
+  }
+
+  .tag {
+    @apply inline-block px-2 py-0.5 rounded-full text-xs bg-mint-50 text-mint-600 border border-mint-100;
+  }
+
+  .category-chip {
+    @apply px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer transition-all;
+  }
+
+  /* ===== 暗黑模式：组件暗黑样式 ===== */
+  .btn-ghost.dark,
+  html.dark .btn-ghost {
+    @apply border-mint-700 text-mint-300;
+  }
+
+  .btn-ghost:hover {
+    @apply bg-mint-50;
+  }
+
+  html.dark .btn-ghost:hover {
+    background-color: rgba(20, 83, 45, 0.4);
+  }
+
+  .btn-danger:hover {
+    @apply bg-red-50;
+  }
+
+  html.dark .btn-danger:hover {
+    background-color: rgba(127, 29, 29, 0.3);
+  }
+
+  .card.dark,
+  html.dark .card {
+    @apply bg-slate-800 border-mint-800;
+  }
+
+  .input.dark,
+  html.dark .input {
+    @apply border-mint-700 bg-slate-800 text-mint-50 placeholder:text-mint-100/30;
+  }
+
+  html.dark .input:focus {
+    border-color: theme('colors.mint.400');
+    box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.2);
+  }
+
+  .tag.dark,
+  html.dark .tag {
+    @apply bg-mint-900/40 text-mint-300 border-mint-800;
+  }
+}
+
+/* ===== Markdown 阅读排版 ===== */
+.markdown-body {
+  @apply text-sage-700 leading-relaxed;
+  font-size: 16px;
+}
+
+html.dark .markdown-body {
+  color: #ecfdf5;
+}
+
+.markdown-body h1 {
+  @apply text-2xl font-bold mt-8 mb-4 pb-2 border-b border-mint-100;
+}
+
+html.dark .markdown-body h1 {
+  border-color: #166534;
+}
+
+.markdown-body h2 {
+  @apply text-xl font-bold mt-7 mb-3;
+}
+
+.markdown-body h3 {
+  @apply text-lg font-semibold mt-6 mb-2;
+}
+
+.markdown-body p {
+  @apply my-4;
+}
+
+.markdown-body ul {
+  @apply list-disc pl-6 my-4 space-y-1;
+}
+
+.markdown-body ol {
+  @apply list-decimal pl-6 my-4 space-y-1;
+}
+
+.markdown-body blockquote {
+  @apply border-l-4 border-mint-300 bg-mint-50/60 pl-4 py-2 my-4 text-sage-700/80 italic rounded-r-lg;
+}
+
+html.dark .markdown-body blockquote {
+  border-color: #16a34a;
+  background-color: rgba(20, 83, 45, 0.3);
+  color: rgba(236, 253, 245, 0.8);
+}
+
+.markdown-body a {
+  @apply text-mint-600 hover:text-mint-500 underline;
+}
+
+html.dark .markdown-body a {
+  color: #6ee7b7;
+}
+
+html.dark .markdown-body a:hover {
+  color: #34d399;
+}
+
+.markdown-body code {
+  @apply px-1.5 py-0.5 rounded bg-cream-100 text-mint-700 font-mono text-[0.9em];
+}
+
+html.dark .markdown-body code {
+  background-color: rgba(20, 83, 45, 0.4);
+  color: #6ee7b7;
+}
+
+.markdown-body pre {
+  @apply bg-sage-700 text-mint-100 p-4 rounded-xl overflow-x-auto my-4 text-sm leading-relaxed;
+}
+
+html.dark .markdown-body pre {
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+}
+
+.markdown-body pre code {
+  @apply bg-transparent text-inherit p-0;
+}
+
+.markdown-body img {
+  @apply rounded-xl my-4 max-w-full;
+}
+
+.markdown-body hr {
+  @apply my-8 border-mint-100;
+}
+
+html.dark .markdown-body hr {
+  border-color: #166534;
+}
+
+.markdown-body table {
+  @apply w-full my-4 border-collapse text-sm;
+}
+
+.markdown-body th,
+.markdown-body td {
+  @apply border border-mint-100 px-3 py-2;
+}
+
+html.dark .markdown-body th,
+html.dark .markdown-body td {
+  border-color: #166534;
+}
+
+.markdown-body th {
+  @apply bg-mint-50 text-left;
+}
+
+html.dark .markdown-body th {
+  background-color: rgba(20, 83, 45, 0.4);
+}
+
+/* ===== 花草装饰动画 ===== */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(4deg);
+  }
+}
+
+@keyframes sway {
+
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+@keyframes gentle-bloom {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}

@@ -1,0 +1,22 @@
+# === 后端 ===
+blog-backend/blog.db
+blog-backend/blog.db-wal
+blog-backend/blog.db-shm
+blog-backend/uploads/
+blog-backend/node_modules/
+blog-backend/.env
+
+# === 前端 ===
+blog-frontend/node_modules/
+blog-frontend/dist/
+blog-frontend/.env
+blog-frontend/.env.local
+
+# === 通用 ===
+.DS_Store
+*.log
+.env
+.idea/
+.vscode/
+*.swp
+*.swo
