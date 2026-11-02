@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { uploadApi } from '../utils/api';
+import { resolveImageUrl } from '../utils/request';
 
 /**
  * 封面图上传组件：点击上传 or 粘贴 or 拖拽图片文件
@@ -26,9 +27,8 @@ export default function ImageUploader({ value, onChange, placeholder }: { value:
 
   return (
     <div
-      className={`relative rounded-xl border-2 border-dashed p-3 transition ${
-        dragOver ? 'border-mint-400 bg-mint-50 dark:bg-mint-900/20' : 'border-mint-200 dark:border-mint-800'
-      } bg-white dark:bg-slate-800`}
+      className={`relative rounded-xl border-2 border-dashed p-3 transition ${dragOver ? 'border-mint-400 bg-mint-50 dark:bg-mint-900/20' : 'border-mint-200 dark:border-mint-800'
+        } bg-white dark:bg-slate-800`}
       onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
       onDragLeave={() => setDragOver(false)}
       onDrop={(e) => {
@@ -38,7 +38,7 @@ export default function ImageUploader({ value, onChange, placeholder }: { value:
     >
       {preview ? (
         <div className="relative group">
-          <img src={preview.startsWith('http') ? preview : preview} alt="封面预览"
+          <img src={resolveImageUrl(preview)} alt="封面预览"
             onError={(e) => { (e.target as HTMLImageElement).src = ''; setPreview(null); onChange(''); }}
             className="w-full h-36 object-cover rounded-lg" />
           <button

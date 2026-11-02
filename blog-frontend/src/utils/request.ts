@@ -7,11 +7,19 @@ import axios from 'axios';
  *     如果没设环境变量，默认也用 '/api'（假设前后端同域部署，不适用于 Netlify 纯前端）
  */
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
-const UPLOADS_BASE = import.meta.env.VITE_UPLOADS_BASE_URL || '';
+
+/** 从 API 地址自动推导图片基地址：https://xxx.onrender.com/api → https://xxx.onrender.com */
+function inferUploadsBase(): string {
+  if (import.meta.env.VITE_UPLOADS_BASE_URL) return import.meta.env.VITE_UPLOADS_BASE_URL;
+  if (!API_BASE.startsWith('http')) return ''; // 走 Vite 代理，无需前缀
+  try { return new URL(API_BASE).origin; } catch { return ''; }
+}
+const UPLOADS_BASE = inferUploadsBase();
 
 const request = axios.create({
   baseURL: API_BASE,
-  timeout: 10000,
+  // Render 免费实例冷启动约 3-5s，超时放宽到 20s
+  timeout: 20000,
 });
 
 /** 图片 URL 规范化：支持生产环境替换 */

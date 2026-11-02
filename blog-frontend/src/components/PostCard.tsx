@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { PostSummary } from '../types';
+import { resolveImageUrl } from '../utils/request';
 
 const DEFAULT_COVER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220" viewBox="0 0 400 220">
@@ -55,7 +56,7 @@ export default function PostCard({ post }: { post: PostSummary }) {
       <span className="absolute top-2 right-2 text-base opacity-40 group-hover:opacity-80 group-hover:rotate-12 transition-all duration-300">🌿</span>
       <div className="aspect-[16/9] bg-cream-100 dark:bg-mint-900/20 overflow-hidden">
         <img
-          src={post.cover || DEFAULT_COVER}
+          src={resolveImageUrl(post.cover) || DEFAULT_COVER}
           alt={post.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           onError={(e) => { (e.target as HTMLImageElement).src = DEFAULT_COVER; }}

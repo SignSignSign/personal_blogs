@@ -1,6 +1,9 @@
 import request from '../utils/request';
 import type { User, Category, PostSummary, PostDetail, Comment, DraftItem, ArchiveYear } from '../types';
 
+// 生产环境后端是独立域名，RSS 开放链接也要指到后端
+const API_ORIGIN = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
+
 // ===== 认证 =====
 export const authApi = {
   register: (data: { username: string; email: string; password: string }) =>
@@ -85,4 +88,4 @@ export const archiveApi = {
 };
 
 /** RSS（直接拿 xml 文本） */
-export const rssUrl = '/api/rss';
+export const rssUrl = `${API_ORIGIN}/rss`;

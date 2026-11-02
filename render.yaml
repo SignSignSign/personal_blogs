@@ -1,31 +1,21 @@
-# Render 部署配置 — 薄荷随笔后端
-# 使用方法：Render Dashboard → New + Web Service → 连接 GitHub 仓库 → 自动读取此文件
+# Render 部署配置 — 薄荷随笔后端（免费实例版）
+# 免费实例不支持持久磁盘，数据库/图片会在重新部署后重置，属于演示级方案。
+# 需要长期保留数据 → 改用 Fly.io volume，或把数据库换成 Supabase Postgres。
 services:
   - name: mint-blog-api
     type: web
     env: node
-    # 后端在仓库子目录
     rootDir: blog-backend
-    # build
     buildCommand: npm install
     startCommand: node src/app.js
-    # 免费实例：512MB，冷启动约 3-5s
-    plan: free
-    # 持久化磁盘（SQLite 数据库 + uploads 图片）
-    # 512MB 免费额度，挂在 /data
-    disk:
-      name: data
-      mountPath: /data
-      sizeGB: 1
+    plan: free # 512MB 内存，15 分钟无访问休眠
+    healthCheckPath: /api/health
     envVars:
-      # Render 自动注入 PORT，不用手写
       - key: NODE_VERSION
-        value: "22"
+        value: "20"
       - key: JWT_SECRET
-        sync: false    # 在 Render Dashboard 手动填（安全考虑）
+        sync: false # Dashboard 手动填：node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
       - key: CORS_ORIGIN
-        sync: false    # 填前端 Netlify 地址，如 https://mint-blog.netlify.app
-      - key: DB_FILE
-        value: /data/blog.db
-      - key: UPLOAD_DIR
-        value: /data/uploads
+        sync: false # 填前端地址，如 https://perlogss.netlify.app
+      - key: PUBLIC_BASE
+        sync: false # RSS 里文章链接用的前端地址，同上

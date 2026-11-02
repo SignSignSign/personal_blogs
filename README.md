@@ -93,6 +93,32 @@ npm run preview
 
 ---
 
+## ☁️ 部署上线（Netlify + Render）
+
+仓库根目录已提供 `netlify.toml` 与 `render.yaml`，导入 GitHub 仓库即可自动识别配置。
+
+### 前端 → Netlify
+1. Netlify → Add new site → Import from GitHub → 选 `personal_blogs`
+2. 构建配置自动读取 `netlify.toml`（base `blog-frontend`，publish `dist`）
+3. Site settings → Environment variables 添加：
+   - `VITE_API_BASE_URL` = `https://<后端域名>/api`
+   - `VITE_UPLOADS_BASE_URL` = `https://<后端域名>`（不填会自动从 API 地址推导）
+4. 改完环境变量需 Trigger deploy 重新构建（Vite 变量在构建时注入）
+
+### 后端 → Render（免费实例）
+1. Render → New + Web Service → 选 `personal_blogs`，根目录 `blog-backend`（`render.yaml` 已写好）
+2. 环境变量（`sync: false` 的三项需手动填）：
+   - `JWT_SECRET`：`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
+   - `CORS_ORIGIN`：Netlify 站点地址，如 `https://perlogss.netlify.app`
+   - `PUBLIC_BASE`：同上（RSS 里文章链接使用）
+3. 首次启动会自动建表并写入分类种子（`src/config/auto-init.js`，幂等）
+
+> ⚠️ 免费实例的限制：无持久磁盘，`blog.db` 与 `uploads/` 会在每次重新部署后重置；
+> 15 分钟无访问会休眠，冷启动约 3-5 秒（前端请求超时已放宽到 20s）。
+> 需要长期保留数据：改用 Fly.io 挂 volume，或把数据库换成 Supabase Postgres。
+
+---
+
 ## ✨ 功能清单
 
 ### V1 基础功能

@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { PostDetail } from '../types';
 import { postApi } from '../utils/api';
+import { resolveImageUrl } from '../utils/request';
 import { useAuth } from '../context/AuthContext';
 import ReadingProgress from '../components/ReadingProgress';
 import TableOfContents from '../components/TableOfContents';
@@ -14,6 +15,13 @@ import CommentSection from '../components/CommentSection';
 const DEFAULT_COVER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="320" viewBox="0 0 800 320"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#dcf6e3"/><stop offset="100%" stop-color="#86efac"/></linearGradient></defs><rect width="800" height="320" fill="url(#g)"/></svg>`
 );
+
+/** 正文内图片：把 /uploads/xxx 补成后端完整地址（生产环境跨域） */
+const mdComponents: any = {
+  img: ({ src, alt }: { src?: string; alt?: string }) => (
+    <img src={resolveImageUrl(src)} alt={alt} loading="lazy" className="rounded-lg" />
+  ),
+};
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -51,7 +59,7 @@ export default function PostDetail() {
       <div className="max-w-3xl mx-auto px-6 py-10 relative">
         {/* 封面 */}
         <div className="rounded-2xl overflow-hidden mb-8 aspect-[16/7] bg-cream-100 dark:bg-mint-900/20">
-          <img src={post.cover || DEFAULT_COVER} alt={post.title}
+          <img src={resolveImageUrl(post.cover) || DEFAULT_COVER} alt={post.title}
             onError={(e) => { (e.target as HTMLImageElement).src = DEFAULT_COVER; }}
             className="w-full h-full object-cover" />
         </div>
@@ -94,7 +102,7 @@ export default function PostDetail() {
 
         {/* 正文 */}
         <article id="article-content" className="markdown-body">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>{post.content}</ReactMarkdown>
         </article>
 
         {/* 目录导航 */}

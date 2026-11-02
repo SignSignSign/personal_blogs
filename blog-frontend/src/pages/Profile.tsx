@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { userApi, draftApi, favoriteApi } from '../utils/api';
+import { resolveImageUrl } from '../utils/request';
 import type { DraftItem, PostSummary } from '../types';
 
 type Tab = 'profile' | 'drafts' | 'favorites';
@@ -51,8 +52,8 @@ export default function Profile() {
         ].map((t) => (
           <button key={t.k} onClick={() => setTab(t.k as Tab)}
             className={`px-4 py-2 text-sm border-b-2 transition ${tab === t.k
-                ? 'border-mint-400 text-mint-600 dark:text-mint-300 font-medium'
-                : 'border-transparent text-sage-700/60 dark:text-mint-100/50 hover:text-mint-500'
+              ? 'border-mint-400 text-mint-600 dark:text-mint-300 font-medium'
+              : 'border-transparent text-sage-700/60 dark:text-mint-100/50 hover:text-mint-500'
               }`}>
             {t.label}
           </button>
@@ -63,7 +64,7 @@ export default function Profile() {
         <div className="card p-8">
           <div className="flex items-center gap-4 mb-8">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-mint-300 to-mint-500 flex items-center justify-center text-white text-3xl overflow-hidden shadow-soft">
-              {avatar ? <img src={avatar} alt="avatar" className="w-full h-full object-cover" /> : user.username[0]?.toUpperCase()}
+              {avatar ? <img src={resolveImageUrl(avatar)} alt="avatar" className="w-full h-full object-cover" /> : user.username[0]?.toUpperCase()}
             </div>
             <div>
               <h2 className="text-xl font-semibold text-sage-700 dark:text-mint-100">{user.username}</h2>

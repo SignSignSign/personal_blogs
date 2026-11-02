@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
 import { rssUrl } from '../utils/api';
+import { resolveImageUrl } from '../utils/request';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -30,7 +31,7 @@ export default function Navbar() {
             <>
               <Link to="/profile" className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-mint-50 hover:dark:bg-mint-900/30">
                 <span className="w-7 h-7 rounded-full bg-mint-200 dark:bg-mint-800 flex items-center justify-center text-mint-700 dark:text-mint-200 font-medium text-xs overflow-hidden">
-                  {user.avatar ? <img src={user.avatar} alt="avatar" className="w-full h-full object-cover" /> : user.username[0]?.toUpperCase()}
+                  {user.avatar ? <img src={resolveImageUrl(user.avatar)} alt="avatar" className="w-full h-full object-cover" /> : user.username[0]?.toUpperCase()}
                 </span>
                 <span className="text-sage-700 dark:text-mint-100">{user.username}</span>
               </Link>

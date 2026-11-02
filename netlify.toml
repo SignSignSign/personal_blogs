@@ -1,0 +1,11 @@
+# Netlify 部署配置 — 让站点从仓库根目录也能自动识别前端子目录
+[build]
+  base = "blog-frontend"
+  command = "npm run build"
+  publish = "dist"
+
+# SPA 路由回退：/post/2、/archive 等前端路由都返回 index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

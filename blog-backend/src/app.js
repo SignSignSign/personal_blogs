@@ -18,7 +18,9 @@ const errorHandler = require('./middleware/error');
 const app = express();
 
 // === 中间件 ===
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*', credentials: true }));
+// CORS_ORIGIN 支持逗号分隔的多个来源，如 http://localhost:5173,https://xxx.netlify.app
+const corsOrigins = (process.env.CORS_ORIGIN || '*').split(',').map((s) => s.trim()).filter(Boolean);
+app.use(cors({ origin: corsOrigins.includes('*') ? '*' : corsOrigins, credentials: true }));
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -51,8 +53,9 @@ app.use((_req, res) => res.status(404).json({ code: 404, message: '接口不存�
 app.use(errorHandler);
 
 const PORT = Number(process.env.PORT) || 3000;
-app.listen(PORT, () => {
-  console.log(`🌿 Blog Backend 已启动: http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🌿 Blog Backend 已启动: http://0.0.0.0:${PORT}`);
+  console.log(`   数据库: ${dbFile}`);
   console.log(`   上传目录: ${UPLOAD_DIR}`);
-  console.log(`   RSS: http://localhost:${PORT}/api/rss`);
+  console.log(`   RSS: /api/rss`);
 });

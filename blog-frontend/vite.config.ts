@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// base: './' 用相对路径，Netlify / 任意子路径部署都能正常加载资源
+// base 必须是 '/'：本站是 SPA，深路由（/post/2）会被 _redirects 回退到 index.html，
+// 若用 './'，静态资源会被解析成 /post/assets/... 而 404
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: '/',
   server: {
     port: 5173,
     proxy: {
